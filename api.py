@@ -117,13 +117,12 @@ def delete_file(file_hash):
         response.code = 404
         return jsonize({'message':'File not found in file system'})
     else:
-        success=os.remove(path)
-    
-    if success:
-        return jsonize({'message' : 'deleted'})
-    else:
-        response.code = 500
-        return jsonize({'message':'Unable to delete file'})
+         try:
+             os.remove(path)
+         except OSError:
+             response.code = 500
+             return jsonize({'message':'Unable to delete file'})
+         return jsonize({'message' : 'deleted'})
 
 @route('/file/find', method='POST')
 def find_file():
