@@ -50,7 +50,6 @@ $('#hexsubmit').submit(function(event){
  
   
 $('#scriptsubmit').submit(function(event){
-  console.log("Hello, world")
   $.ajax({
     url: '/script',
     type: 'post',
