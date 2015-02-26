@@ -65,6 +65,9 @@ $('#scriptsubmit').submit(function(event){
     },
     success: function(response, textStatus, jqXHR){
         $('#scriptview').empty().append(response);
+	$('pre code').each(function(i, block) {
+          hljs.highlightBlock(block);
+        });
     },
     error: function(jqXHR, textStatus, errorThrown){
         console.log('error(s):'+textStatus, errorThrown);
