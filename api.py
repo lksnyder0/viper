@@ -83,7 +83,6 @@ def get_file(file_hash):
 
     return data
 
-# TODO: delete notes as well.
 @route('/file/delete/<file_hash>', method='GET')
 def delete_file(file_hash):
     success = False
@@ -117,12 +116,13 @@ def delete_file(file_hash):
         response.code = 404
         return jsonize({'message':'File not found in file system'})
     else:
-         try:
-             os.remove(path)
-         except OSError:
-             response.code = 500
-             return jsonize({'message':'Unable to delete file'})
-         return jsonize({'message' : 'deleted'})
+        success=os.remove(path)
+    
+    if success:
+        return jsonize({'message' : 'deleted'})
+    else:
+        response.code = 500
+        return jsonize({'message':'Unable to delete file'})
 
 @route('/file/find', method='POST')
 def find_file():
@@ -156,7 +156,7 @@ def find_file():
 
     if not value:
         response.code = 400
-        raise jsonize({'message':'Invalid search term'})
+        return jsonize({'message':'Invalid search term'})
 
     rows = db.find(key=key, value=value)
 
@@ -190,7 +190,7 @@ def add_tags():
     
     if not rows:
         response.code = 404
-        raise jsonize({'message':'File not found in the database'})
+        return jsonize({'message':'File not found in the database'})
           
     for row in rows:
         malware_sha256=row.sha256
